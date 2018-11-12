@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Book</title>
+	<meta charset="utf-8">
+	{% load staticfiles %}
+	<link rel="stylesheet" href="{% static 'review/review.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+</head>
+<body>
+	<div class="wrapper_book">
+		<div class="header">
+			<h1 class="logo">booKCr</h1>
+			<div class="right_links">
+				<a href="{% url 'review' %}">Home</a>
+				<span>&nbsp;|&nbsp;</span>
+				<a href="{% url 'logout' %}">Logout</a>
+			</div>
+		</div>
+		<div class="content_book">
+			<center>
+				<h2>{{book.title}}</h2>
+			</center>
+			<h3><span>Author:</span> {{book.author}}</h3>
+			<div>
+				{% for rev, fav1, fav2 in reviews %}
+					<div class="book_rating">
+						<h3>
+							Rating:
+							{% for f in fav1 %}
+								{% load static %}
+									<img src="{% static 'review/goldstar.png' %}" alt="star"/>
+							{% endfor %}
+							{% for f in fav2 %}
+								{% load static %}
+								<img src="{% static 'review/outlinestar.png' %}" alt="hollow star"/>
+							{% endfor %}
+						</h3>
+						<p class="review_text">
+							<a class="review_user" href="{% url 'user' uid=rev.user.id %}">{{rev.user.alias}}</a> :<br> {{rev.review}}
+						</p>
+						<p class="review_date">
+							Posted on {{rev.created}}.
+						</p>
+						<p class="delete">
+							{% if rev.user.id == request.session.user %}
+								<a href="{% url 'delete' rid=rev.id %}">
+									Delete this Review
+								</a>
+							{% endif %}
+						</p>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="book_new">
+			<center>
+				<h2>Add &nbsp;Review</h2>
+				<form class="review_add" action="/add1" method="post">
+					{% csrf_token %}
+					<input type="hidden" name="bookid" value="{{book.id}}"><br>
+					<textarea name="review" placeholder="review"></textarea><br>
+					<input type="number" name="rating" min="0" max="5" placeholder="rating"><br>
+					<input type="submit" value="Submit">
+				</form>
+			</center>
+		</div>
+	</div>
+</body>
+</html>

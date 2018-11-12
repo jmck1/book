@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>User Page</title>
+	<meta charset="utf-8">
+	{% load staticfiles %}
+	<link rel="stylesheet" href="{% static 'review/review.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+</head>
+<body>
+	<div class="wrapper_user">
+		<div class="header">
+			<h1 class="logo">booKCr</h1>
+			<div class="right_links">
+				<a href="{% url 'review' %}">Home</a>
+				<span>&nbsp;|&nbsp;</span>
+				<a href="{% url 'add' %}">Add Book and Reveiw</a>
+				<span>&nbsp;|&nbsp;</span>
+				<a href="{% url 'logout' %}">Logout</a>
+			</div>
+		</div>
+		<div class="user_user">
+			<center>
+				<h2>User &nbsp;Details</h2>
+			</center>
+			<div class="user_details">
+				<h3><span>User Alias:</span> {{user.alias}}</h3>
+				<h3><span>Name:</span> {{user.name}}</h3>
+				<h3><span>Email:</span> {{user.email}}</h3>
+				<h3><span>Total Reviews:</span> {{reviews|length}}</h3>
+			</div>
+		</div>
+		<div class="user_review">
+			<center>
+				<h2>{{user.alias}}'s &nbsp;Reviews</h2>
+			</center>
+			<ul>
+				{% for review in reviews %}
+					<li>
+						<a href="{% url 'book' bid=review.book.id %}">
+							{{review.book.title}}
+						</a>
+					</li>
+				{% endfor %}
+
+			</ul>
+		</div>
+	</div>
+</body>
+</html>
